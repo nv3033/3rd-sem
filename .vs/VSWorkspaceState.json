@@ -12,8 +12,9 @@
     ]
   },
   "ExpandedNodes": [
-    ""
+    "",
+    "\\src"
   ],
-  "SelectedNode": "\\out",
+  "SelectedNode": "\\external",
   "PreviewInSolutionExplorer": false
 }

@@ -1,5 +1,18 @@
-D:/3rd sem/out/build/x64-debug/CMakeFiles/edit_cache.dir
-D:/3rd sem/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
-D:/3rd sem/out/build/x64-debug/3rd sem/CMakeFiles/CMakeTarget.dir
-D:/3rd sem/out/build/x64-debug/3rd sem/CMakeFiles/edit_cache.dir
-D:/3rd sem/out/build/x64-debug/3rd sem/CMakeFiles/rebuild_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/CMakeFiles/3rd-sem.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/CMakeFiles/edit_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/CMakeFiles/rebuild_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/src/CMakeFiles/CMakeTarget.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/src/CMakeFiles/edit_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/src/CMakeFiles/rebuild_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glfw/CMakeFiles/edit_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glfw/CMakeFiles/rebuild_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glfw/src/CMakeFiles/glfw.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glfw/src/CMakeFiles/update_mappings.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glfw/src/CMakeFiles/edit_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glfw/src/CMakeFiles/rebuild_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glad/CMakeFiles/glad.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glad/CMakeFiles/edit_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/glad/CMakeFiles/rebuild_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/imgui/CMakeFiles/ImGui.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/imgui/CMakeFiles/edit_cache.dir
+D:/GitHub/3rd-sem/out/build/x64-debug/external/imgui/CMakeFiles/rebuild_cache.dir

@@ -1,8 +1,8 @@
-# Install script for directory: D:/3rd sem
+# Install script for directory: D:/GitHub/3rd-sem
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "D:/3rd sem/out/install/x64-debug")
+  set(CMAKE_INSTALL_PREFIX "D:/GitHub/3rd-sem/out/install/x64-debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,7 +34,10 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("D:/3rd sem/out/build/x64-debug/3rd sem/cmake_install.cmake")
+  include("D:/GitHub/3rd-sem/out/build/x64-debug/src/cmake_install.cmake")
+  include("D:/GitHub/3rd-sem/out/build/x64-debug/external/glfw/cmake_install.cmake")
+  include("D:/GitHub/3rd-sem/out/build/x64-debug/external/glad/cmake_install.cmake")
+  include("D:/GitHub/3rd-sem/out/build/x64-debug/external/imgui/cmake_install.cmake")
 
 endif()
 
@@ -46,5 +49,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/3rd sem/out/build/x64-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/GitHub/3rd-sem/out/build/x64-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
