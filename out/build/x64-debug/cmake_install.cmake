@@ -36,6 +36,7 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("D:/GitHub/3rd-sem/out/build/x64-debug/src/cmake_install.cmake")
   include("D:/GitHub/3rd-sem/out/build/x64-debug/external/glfw/cmake_install.cmake")
+  include("D:/GitHub/3rd-sem/out/build/x64-debug/external/glm/cmake_install.cmake")
   include("D:/GitHub/3rd-sem/out/build/x64-debug/external/glad/cmake_install.cmake")
   include("D:/GitHub/3rd-sem/out/build/x64-debug/external/imgui/cmake_install.cmake")
 

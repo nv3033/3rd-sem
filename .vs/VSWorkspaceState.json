@@ -13,8 +13,9 @@
   },
   "ExpandedNodes": [
     "",
-    "\\src"
+    "\\external",
+    "\\src",
+    "\\src\\include"
   ],
-  "SelectedNode": "\\external",
   "PreviewInSolutionExplorer": false
 }
