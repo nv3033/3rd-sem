@@ -9,17 +9,23 @@
 #include <iostream>
 #define STB_IMAGE_IMPLEMENTATION  
 #include "stb_image.h"
+#include <glm/mat3x3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/trigonometric.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 const char* vertexShaderSource = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
 layout (location = 1) in vec2 aTexCoord;
+uniform mat4 model_matrix;
 
 out vec2 TexCoord;
 
 void main()
 {
-    gl_Position = vec4(aPos, 1.0);
+    gl_Position = model_matrix * vec4(aPos, 1.0);
     TexCoord = aTexCoord;
 })";
 
@@ -37,6 +43,11 @@ void main()
     FragColor = texture(textureSampler, TexCoord);
 }
 )";
+
+//Переменые для хранения значений трансформации объекта
+float scale[3] = { 1.f, 1.f, 1.f };
+float rotate = 0.f;
+float translate[3] = { 0.f, 0.f, 0.f };
 
 int main() {
     // Инициализация GLFW
@@ -66,6 +77,28 @@ int main() {
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
+
+    glm::mat3 mat_1(4, 0, 0, 2, 8, 1, 0, 1, 0);
+    glm::mat3 mat_2(4, 2, 9, 2, 0, 4, 1, 4, 2);
+
+    glm::mat3 result_mat = mat_1 * mat_2;
+
+    glm::vec4 vec(1, 2, 3, 4);
+    glm::mat4 mat_identity(1);
+
+    glm::vec4 result_vec = mat_identity * vec;
+
+    //Настройка и запуск ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGui_ImplOpenGL3_Init();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+
+    //Создание окна ImGui
+    ImGuiIO& io = ImGui::GetIO();
+    io.DisplaySize.x = 800;
+    io.DisplaySize.y = 600;
+
 
     // Компиляция и создание вершинного шейдера
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -158,6 +191,39 @@ int main() {
         // Очистка буфера цвета
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        
+        //Обновляем окно ImGui
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui::NewFrame();
+
+        //Описываем само окно
+        ImGui::Begin("Window");
+        ImGui::SliderFloat3("scale", scale, 0.f, 2.f);
+        ImGui::SliderFloat("rotate", &rotate, 0.f, 360.f);
+        ImGui::SliderFloat3("translate", translate, -1.f, 1.f);
+        ImGui::End();
+
+        //Рендерим окно ImGui
+        ImGui::Render();
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        //Обновление матриц трансформации
+        glm::mat4 scale_matrix(scale[0], 0, 0, 0,
+            0, scale[1], 0, 0,
+            0, 0, scale[2], 0,
+            0, 0, 0, 1);
+        float rotate_in_radians = glm::radians(rotate);
+        glm::mat4 rotate_matrix(cos(rotate_in_radians), sin(rotate_in_radians), 0, 0,
+            -sin(rotate_in_radians), cos(rotate_in_radians), 0, 0,
+            0, 0, 1, 0,
+            0, 0, 0, 1);
+        glm::mat4 translate_matrix(1, 0, 0, 0,
+            0, 1, 0, 0,
+            0, 0, 1, 0,
+            translate[0], translate[1], translate[2], 1);
+        glm::mat4 model_matrix = translate_matrix * rotate_matrix * scale_matrix;
+
+        glUniformMatrix4fv(glGetUniformLocation(shaderProgram, "model_matrix"), 1, GL_FALSE, glm::value_ptr(model_matrix));
 
         // Использование шейдерной программы
         glUseProgram(shaderProgram);
