@@ -51,7 +51,7 @@ double interpolatedNoise(double x, double y) {
     return interpolate(i1, i2, fractionalY);
 }
 
-int main() {
+int main(int argc, char* argv[]) {
 
         const int WIDTH = 10; // Ширина двумерного массива точек
         const int HEIGHT = 10; // Высота двумерного массива точек
@@ -122,6 +122,8 @@ int main() {
     //Создаем счетчик шестиугольников и их массив
     int hexcount = 0;
     Hexsagon hex[16];
+    for (int i = 0; i < 16; i++)
+        hex[i].path = *argv;
 
     //Создаем камеру
     float camera_position[3] = { 0.f, 0.f, 1.f };

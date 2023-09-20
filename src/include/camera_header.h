@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include <glm/trigonometric.hpp>
 #include <glm/mat3x3.hpp>
@@ -12,12 +12,15 @@ public:
     glm::mat4 m_projection_matrix;
     Camera::Camera()
     {
+        //Создание камеры
         update_view_matrix();
         update_projection_matrix();
     }
 
-    void Camera::update_view_matrix()
+    void Camera::update_view_matrix() //см. https://ru.wikipedia.org/wiki/%D0%9C%D0%B0%D1%82%D1%80%D0%B8%D1%86%D0%B0_%D0%BF%D0%B5%D1%80%D0%B5%D1%85%D0%BE%D0%B4%D0%B0
     {
+        //---
+        //Обновляем матрицы вращения
         float rotate_in_radians_x = glm::radians(-m_rotation.x);
         glm::mat4 rotate_matrix_x(1, 0, 0, 0,
             0, cos(rotate_in_radians_x), sin(rotate_in_radians_x), 0,
@@ -35,16 +38,21 @@ public:
             -sin(rotate_in_radians_z), cos(rotate_in_radians_z), 0, 0,
             0, 0, 1, 0,
             0, 0, 0, 1);
+        //---
 
+        //---
+        //обновляем матрицу позиции
         glm::mat4 translate_matrix(1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
             -m_position[0], -m_position[1], -m_position[2], 1);
+        //---
 
+        //матрица вида - произведение всех матриц трансформации
         m_view_matrix = rotate_matrix_y * rotate_matrix_x * translate_matrix;
     }
 
-    void Camera::update_projection_matrix()
+    void Camera::update_projection_matrix()//строим перспективу
     {
         float r = 0.1f;
         float t = 0.1f;
