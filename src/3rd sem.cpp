@@ -121,9 +121,11 @@ int main(int argc, char* argv[]) {
 
     //Создаем счетчик шестиугольников и их массив
     int hexcount = 0;
-    Hexsagon hex[16];
-    for (int i = 0; i < 16; i++)
-        hex[i].path = *argv;
+    std::vector<Hexsagon> hex;
+    for(int i = 0; i < 16; i++){
+        hex.push_back(Hexsagon(*argv));
+    }
+    std::cout << argv[0] << std::endl;
 
     //Создаем камеру
     float camera_position[3] = { 0.f, 0.f, 1.f };

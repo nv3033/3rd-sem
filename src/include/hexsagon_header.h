@@ -10,7 +10,6 @@
 #include <glm/gtc/type_ptr.hpp>
 class Hexsagon {
 public:
-    char* path;
 
     GLuint VBO, VAO;
 
@@ -21,8 +20,7 @@ public:
     unsigned int shaderProgram = glCreateProgram();
     unsigned int texture;
 
-    Hexsagon() {
-
+    Hexsagon(std::string path) {
         //вертексный шейдер
         const char* vertexShaderSource = R"(
 #version 330 core
@@ -152,7 +150,11 @@ void main()
 
         // Загрузка изображения и создание текстуры
         int width, height, nrChannels;
-        unsigned char* data = stbi_load("src/include/ashwall7.png", &width, &height, &nrChannels, 0);
+
+        std::string exclude = "out/build/x64-debug/3rd-sem.exe";
+        std::string final_path = path.substr(0, path.length() - exclude.length()) + R"(src\include\ashwall7.png)";
+        std::cout << final_path << std::endl;
+        unsigned char* data = stbi_load(final_path.c_str(), &width, &height, &nrChannels, 0);
         if (data) {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
             glGenerateMipmap(GL_TEXTURE_2D);
