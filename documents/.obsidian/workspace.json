@@ -25,7 +25,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Ссылки на материалы.md",
+                "file": "Пробное описание HexoWorld.md",
                 "mode": "preview",
                 "source": false
               }
@@ -82,7 +82,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "342a4add7e0e2f2c",
@@ -98,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Ссылки на материалы.md",
+                "file": "Пробное описание HexoWorld.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Ссылки на материалы.md",
+                "file": "Пробное описание HexoWorld.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Ссылки на материалы.md"
+                "file": "Пробное описание HexoWorld.md"
               }
             }
           }
@@ -159,10 +160,14 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "dd8ded9fcbd008c8",
+  "active": "f0b36fdea5892b61",
   "lastOpenFiles": [
-    "Пробное описание HexoWorld.md",
+    "attachments/Pasted image 20231004111025.png",
+    "attachments/Pasted image 20231004111922.png",
+    "attachments/Pasted image 20231004115953.png",
+    "attachments/Pasted image 20231004120045.png",
     "Ссылки на материалы.md",
+    "Пробное описание HexoWorld.md",
     "attachments/Pasted image 20231003204858.png",
     "attachments/Pasted image 20231003204608.png",
     "attachments/Pasted image 20231003204304.png",
