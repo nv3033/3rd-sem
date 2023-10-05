@@ -26,7 +26,7 @@
               "type": "markdown",
               "state": {
                 "file": "Пробное описание HexoWorld.md",
-                "mode": "preview",
+                "mode": "source",
                 "source": false
               }
             }
@@ -82,8 +82,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "342a4add7e0e2f2c",
@@ -160,7 +159,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "f0b36fdea5892b61",
+  "active": "dd8ded9fcbd008c8",
   "lastOpenFiles": [
     "attachments/Pasted image 20231004111025.png",
     "attachments/Pasted image 20231004111922.png",
