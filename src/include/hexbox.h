@@ -1,7 +1,7 @@
-#include <iostream>
+﻿#include <iostream>
 #include <array>
 #include <vector>
-#include <algorithm>
+//#include <algorithm>
 
 typedef const int& cint;
 
@@ -12,6 +12,7 @@ struct smooth_trans_args {
     int type_mat = 0; //тип материала/текстуры перехода
     int type_smooth = 0; //тип сглаживания
 };
+
 
 //данные шестиугольника
 struct hex_args {
@@ -34,11 +35,13 @@ public:
         w = x;
         h = y;
         count_hex = w * h;
-
+        count_st = count_st_func(w, h);
         reserve_hex_grid(hex_grid, w, h);
         fe_hex_grid(w, h);
         reserve_st_grid(st_grid, w, h);
         fe_st_grid(w, h);
+
+        init_hex_st_all(w, h);
     };
     ~Hexbox() = default;
     hex_args GetHex(cint x, cint y); //возвращает гекс с координатами x, y
@@ -51,7 +54,8 @@ private:
 
     int number_st(cint x1, cint y1, cint x2, cint y2, cint w);
     int count_st_func(cint x, cint y); //кол-во всех переходов для сетки с данными размерами(по ширине и длине)(только если квадратное!)
-
+    void init_hex_st(cint x, cint y, cint w); //привязка к гексу смежных с гексом переходов(заполняет массив st)
+    void init_hex_st_all(cint w, cint h);
 
 };
 
@@ -66,9 +70,9 @@ inline int Hexbox::number_st(cint x1, cint y1, cint x2, cint y2, cint w)
 {
     int ch1 = number_ch(x1, y1, w);
     int ch2 = number_ch(x2, y2, w);
-    if (ch1 < ch2 || (ch1 + 1) == ch2 || (ch1 + w) == ch2 || (ch1 + w + 1) == ch2) {
+    if (( ch1 < ch2) || ((ch1 + 1) == ch2) || ((ch1 + w) == ch2) || ((ch1 + w + 1) == ch2)) {
         return (y2 - y1) * (ch1 + ch2 + 2 * y1)
-            + (1 + y2 - y1) * (y1 * (3 * w) + x2);
+            + (1 + y1 - y2) * (y1 * (3 * w - 2) + x2);
     }
     else {
         return 0;
@@ -80,6 +84,38 @@ inline int Hexbox::count_st_func(cint x, cint y)
 {
     int c = (3 * x * y) - 2 * x - 2 * y + 1;
     return c;
+}
+
+inline void Hexbox::init_hex_st(cint x, cint y, cint w)
+{
+    //std::array <int, 6> st1 = { 0,0,0,0,0,0 };
+    int num = number_ch(x, y, w);
+    if (y % 2 == 1) {
+        hex_grid[num].st[0] = number_st(x, (y - 1), x, y, w); //нижний левый 
+        hex_grid[num].st[1] = number_st((x + 1), (y - 1), x, y, w); //нижний правый
+        hex_grid[num].st[2] = number_st(x, y, (x + 1), y, w); //правый
+        hex_grid[num].st[3] = number_st(x, y, (x + 1), (y + 1), w); //верхний правый
+        hex_grid[num].st[4] = number_st(x, y, x, (y + 1), w); //верхний левый
+        hex_grid[num].st[5] = number_st((x - 1), y, x, y, w); //левый
+    }
+    else {
+        hex_grid[num].st[0] = number_st((x - 1), (y - 1), x, y, w); //нижний левый 
+        hex_grid[num].st[1] = number_st(x, (y - 1), x, y, w); //нижний правый
+        hex_grid[num].st[2] = number_st(x, y, (x + 1), y, w); //правый
+        hex_grid[num].st[3] = number_st(x, y, x, (y + 1), w); //верхний правый
+        hex_grid[num].st[4] = number_st(x, y, (x - 1), (y + 1), w); //верхний левый
+        hex_grid[num].st[5] = number_st((x - 1), y, x, y, w); //левый
+    }
+    
+}
+
+inline void Hexbox::init_hex_st_all(cint w, cint h)
+{
+    for (int i = 0; i < h; i += 1) {
+        for (int j = 0; j < w; j += 1) {
+            init_hex_st(j, i, w);
+        }
+    }
 }
 
 inline hex_args Hexbox::GetHex(cint x, cint y)
