@@ -1,6 +1,10 @@
-﻿#include <iostream>
+﻿//#include <iostream>
+#include <fstream>
+
 #include <array>
 #include <vector>
+#include <string>
+
 #include <algorithm>
 
 typedef const int& cint;
@@ -15,9 +19,9 @@ struct smooth_trans_args {
 
 //данные шестиугольника
 struct hex_args {
-    float x2d = 0;
-    //int x2d = 0; //x в 2Д
-    int y2d = 0; //y в 2Д
+    //float x2d = 0;
+    long int x2d = 0; //x в 2Д
+    long int y2d = 0; //y в 2Д
     int hex_h = 0; //высота (в 3D)
     int type_mat = 0; //тип материала/текстуры гекса 
 
@@ -32,12 +36,14 @@ public:
     int h; //высота(в 2D) поля (OY)(или длина...)(в кол-ве гексов)
     int count_st; //кол-во переходов
     int count_hex; //кол-во гексов
-    int a = 5; 
+    int a; //сторона (ребро) гекса
     std::vector <hex_args> hex_grid; //массив шестиугольников
     std::vector <smooth_trans_args>  st_grid; //массив переходов
-    Hexbox(cint x, cint y) {
-        w = x;
-        h = y;
+    
+    Hexbox(cint xx, cint yy, cint aa) {
+        w = xx;
+        h = yy;
+        a = aa;
         count_hex = w * h;
         count_st = count_st_func(w, h);
         fe_hex_grid(w, h, a);
@@ -61,15 +67,28 @@ public:
     int GetCoordX_hex(cint x, cint y);
     int GetCoordY_hex(cint x, cint y);
 
+    int GetCoordX_hex_near(cint x, cint y, const short& n);
+    int GetCoordY_hex_near(cint x, cint y, const short& n);
+
+
+
     void PutHeight_hex(cint x, cint y, cint h);
     void PutHeight_st(cint ch1, cint ch2, cint h);
 
     //Для материалов поверхностей
-    int Get_hex_near(cint x, cint y); //возращает номер ближайшего гекса отсносительно 2д точки, 
+    int Get_hex_near(cint x, cint y, const short& n); //возвращает отсортированный по близости номер n гекса 
+    //+ заполняет массив 4-мя расстояниями и номерами ближайших гексов относительно 2д точки, 
     //где а - расстояние от центра гекса до его вершин
 
-
+    //сохраняет сетку в файл с именем name
+    void save(std::string name);
+    void load(std::string name);
+    
 private:
+    std::pair <int, int> point_near = {};
+    std::array <std::pair <unsigned int, int>, 4> near_hex = {};
+
+
     int number_ch(cint x, cint y, cint w); //номер гекса в массиве гексов(по x, y и ширине поля)(только если квадратное!)
 
     void fe_hex_grid(cint x, cint y, cint a); //заполнение дефолтными значениями параметров каждого гекса
@@ -164,6 +183,16 @@ inline int Hexbox::GetCoordY_hex(cint x, cint y)
     return GetHex(x, y).y2d;
 }
 
+inline int Hexbox::GetCoordX_hex_near(cint x, cint y, const short& n)
+{
+    return hex_grid[Get_hex_near(x, y, n)].x2d;
+}
+
+inline int Hexbox::GetCoordY_hex_near(cint x, cint y, const short& n)
+{
+    return hex_grid[Get_hex_near(x, y, n)].y2d;
+}
+
 inline void Hexbox::PutHeight_hex(cint x, cint y, cint h)
 {
     hex_grid[number_ch(x,y,w)].hex_h = h;
@@ -179,30 +208,37 @@ inline void Hexbox::PutHeight_st(cint ch1, cint ch2, cint h)
 }
 
 //даёт номер ближайшего гекса от точки в 2д плоскости
-inline int Hexbox::Get_hex_near(cint point_x, cint point_y)
+inline int Hexbox::Get_hex_near(cint point_x, cint point_y, const short& n)
 {
     /*int h = a * sqrt(3) / 2;
     float xh = x / h;
     float ya = y / a;
     int ia = ya / a;*/
+    //if (point_near.first != point_x || point_near.second != point_y) {
+        std::vector <std::pair <unsigned int, int>> distance_vec = {};
+        unsigned int distance = 0;
+        int x_dif = 0; //разница по х
+        int y_dif = 0; //разница по у
+        for (int i = 0; i < count_hex; i += 1) {
+            x_dif = hex_grid[i].x2d - point_x;
+            y_dif = hex_grid[i].y2d - point_y;
+            distance = sqrt(x_dif * x_dif + y_dif * y_dif);
+            distance_vec.push_back(std::make_pair(distance, i));
 
-    std::vector <std::pair <unsigned int, int>> distance_vec = {};
-    unsigned int distance = 0;
-    int x_dif = 0; //разница по х
-    int y_dif = 0; //зазница по у
-    for (int i = 0; i < count_hex; i += 1) {
-        x_dif = hex_grid[i].x2d - point_x; 
-        y_dif = hex_grid[i].y2d - point_y;
-        distance = sqrt(x_dif * x_dif + y_dif * y_dif);
-        distance_vec.push_back(std::make_pair(distance,i));
+        }
+        std::sort(distance_vec.begin(), distance_vec.end());
 
-    }
-    std::sort(distance_vec.begin(), distance_vec.end());
+        /*int xh1 = ( x / h ) - h;
+        int ya1 = ( y / (1.5 * a) ) - a;*/
 
-    /*int xh1 = ( x / h ) - h;
-    int ya1 = ( y / (1.5 * a) ) - a;*/
+        //return distance_vec[0].second;
 
-    return distance_vec[0].second;
+        near_hex[0] = distance_vec[0];
+        near_hex[1] = distance_vec[1];
+        near_hex[2] = distance_vec[2];
+        near_hex[3] = distance_vec[3];
+    //}
+    return near_hex[n].second;
 }
 
 //заполняет массив гексов нулями
@@ -229,12 +265,58 @@ inline void Hexbox::fe_st_grid(cint x, cint y)
 {
     count_st = Hexbox::count_st_func(x, y);
     smooth_trans_args def_st = { 0, 0, 0 };
-    for (int i = 0; i < count_hex; i += 1) {
+    for (int i = 0; i < count_st; i += 1) {
         st_grid.push_back(def_st);
     }
 }
 
-int Hexbox::number_ch(cint x, cint y, cint w)
+inline int Hexbox::number_ch(cint x, cint y, cint w)
 {
     return w * y + x;
+}
+
+
+
+inline void Hexbox::save(std::string name)
+{
+    std::ofstream file(name + ".hb");
+
+    if (file.is_open()) {
+        file << w << " " << h << " " << a << std::endl;
+        file << count_hex << " " << count_st << std::endl;
+        for (int i = 0; i < count_hex - 1; i += 1) {
+            file << hex_grid[i].x2d << " " \
+                << hex_grid[i].y2d << " " \
+                << hex_grid[i].hex_h << " " \
+                << hex_grid[i].type_mat << " " \
+                << std::endl;
+        }
+        for (int j = 0; j < count_st - 1; j += 1) {
+            file << st_grid[j].st_h << " " \
+                << st_grid[j].type_mat << " " \
+                << st_grid[j].type_smooth << " " \
+                << std::endl;
+        }
+    }
+}
+
+inline void Hexbox::load(std::string name)
+{
+    std::ifstream file(name + ".hb");
+
+    if (file.is_open()) {
+        file >> w  >> h >> a;
+        file >> count_hex >> count_st ;
+        for (int i = 0; i < count_hex - 1; i += 1) {
+            file >> hex_grid[i].x2d  \
+                >> hex_grid[i].y2d  \
+                >> hex_grid[i].hex_h  \
+                >> hex_grid[i].type_mat;
+        }
+        for (int j = 0; j < count_st - 1; j += 1) {
+            file >> st_grid[j].st_h  \
+                >> st_grid[j].type_mat  \
+                >> st_grid[j].type_smooth;
+        }
+    }
 }
