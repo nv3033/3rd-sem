@@ -107,11 +107,11 @@ private:
 //     (может быть использовано как особый номер для индикации границ поля и его обработки(специальный переход для границы)))
 inline int Hexbox::number_st(cint x1, cint y1, cint x2, cint y2, cint w)
 {
-    int ch1 = number_ch(x1, y1, w);
-    int ch2 = number_ch(x2, y2, w);
+    int ch1 = std::min(number_ch(x1, y1, w), number_ch(x2, y2, w));
+    int ch2 = std::max(number_ch(x1, y1, w), number_ch(x2, y2, w));
     //if (( ch1 < ch2) || ((ch1 + 1) == ch2) || ((ch1 + w) == ch2) || ((ch1 + w + 1) == ch2) 
-    if ((ch1 < ch2) && (((ch1 + 1) == ch2 && y1 == y2) || ((ch1 + w) == ch2) || 
-        (((ch1 + w - 1) == ch2) && y1 % 2 == 0)))
+    if ((ch1 < ch2) && (((ch1 + 1) == ch2 && (y1 == y2)) || ((ch1 + w) == ch2) ||
+        (((ch1 + w + 1) == ch2) && ((y2 % 2) == 0)) || (((ch1 + w - 1) == ch2) && (y1 % 2 == 0))))
         //&& (x1 == w && y1 == y2 )))
     {
         return (y2 - y1) * (ch1 + ch2 + 2 * y1)
@@ -150,7 +150,12 @@ inline smooth_trans_args Hexbox::GetSt(cint ch1, cint ch2)
 
 inline int Hexbox::GetSt_num(cint ch1, cint ch2)
 {
-    return 0;
+    int x1 = ch1 % w;
+    int x2 = ch2 % w;
+    int y1 = ch1 / w;
+    int y2 = ch2 / w;
+    int n_st = number_st(x1, y1, x2, y2, w);
+    return n_st;
 }
 
 inline int Hexbox::GetHeight_hex(cint x, cint y)
